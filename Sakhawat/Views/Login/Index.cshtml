@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<div class="row">
+   <div class="12">
+      <form>
+         <div class="form-group">
+            @*<input name="Id" id="Id" hidden />*@
+            <label name="UserName" class="control-label">User Name</label>
+            <input type="text" id="UserName" class="form-control" />
+         </div>
+         <div class="form-group">
+            <label name="Password" class="control-label">Password</label>
+            <input type="password" id="Password" class="form-control" />
+         </div>
+         <div class="form-group">
+            <label name="BranchID" class="control-label">Branch Name</label>
+            <select id="BranchID" class="form-control">
+               <option value="">Select</option>
+            </select>
+         </div>
+         <input type="button" onclick="Login()" class="mt-2 btn btn-primary" value="Submit" />@*Login</input>*@
+      </form>
+   </div>
+</div>
+
+
+@section Scripts{
+   <script>
+      $(function () {
+         getBranch();
+      });
+
+      var baseUrl = "https://localhost:7087/";
+      // GetAll Brach
+      function getBranch() {
+         $("#BranchID option").remove();
+         $.ajax({
+            url: baseUrl + "Login/GetAllBranch",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (res) {
+               //console.log(res);
+               $("#BranchID").append($("<option>").text("Select").attr({ "Value": '' }));
+               $.each(res, function (index, v) {
+                  $("#BranchID").append($("<option>").text(v.branchNameEnglish).attr({ "Value": v.branchId }));
+               })
+            },
+            error: function (err) {
+               console.log(err);
+            }
+         });
+      }
+
+      function Login() {
+         const loginInfo = {
+            loginNameEnglish: $("#UserName").val(),
+            password: $("#Password").val(),
+            branchId: $("#BranchID").val()
+         };
+         $.ajax({
+            url: baseUrl + "Login/LoginUser",
+            method: "POST",
+            type: "application/json",
+            dataType: "JSON",
+            //data: JSON.stringify(loginInfo),
+            data: loginInfo,
+            success: function (loginInfo) {
+               console.log(loginInfo);
+               debugger
+               window.location.href = baseUrl + "Login/Dashboard"
+            },
+            error: function (err) {
+               console.log(err)
+            }
+         });
+      };
+   </script>
+}

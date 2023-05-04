@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Sakhawat.Model.Models.SecBUserInfo>
+
+@{
+   ViewData["Title"] = "Dashboard";
+}
+
+<h1>Dashboard</h1>
+
+<div class="row">
+   <div class="col-4">
+      <div class="input-group">
+         <div class="form-outline">
+            <input type="search" id="Search" class="form-control" />
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-12">
+      <table class="table table-striped table-borderless">
+         <thead>
+            <tr>
+               <td>EmployeeId</td>
+               <td>LoginName English</td>
+               <td>LoginName Local</td>
+               <td>Password</td>
+               <td>User Group</td>
+               <td>Start Date</td>
+               <td>End Date</td>
+            </tr>
+         </thead>
+         <tbody>
+            @foreach (var item in Model)
+            {
+               <tr class="Search">
+                  <td>@item.EmployeeId</td>
+                  <td>@item.LoginNameEnglish</td>
+                  <td>@item.LoginNameLocal</td>
+                  <td>@item.Password</td>
+                  <td>@item.UserGroupId</td>
+                  <td>@item.StartDate</td>
+                  <td>@item.EndDate</td>
+               </tr>
+            }
+         </tbody>
+      </table>
+   </div>
+</div>
+
+@section Scripts{
+   <script>
+      $(function(){
+         function Contains(text_one, text_two){
+            if(text_one.indexOf(text_two) != -1)
+               return true;
+         }
+         $("#Search").keyup(function (){
+            var searchText = $("#Search").val().toLowerCase();
+            $(".Search").each(function (){
+               if (!Contains($(this).text().toLowerCase(), searchText)) {
+                  $(this).hide();
+               }
+               else{
+                  $(this).show();
+               }
+            })
+         })
+      });
+   </script>
+}
